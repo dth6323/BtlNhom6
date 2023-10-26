@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Identity;
+@model IdentityRole;
+<div class="Row">
+    <div class="row-md-4">
+        <form method="post">
+            <h2>Create role</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating table-responsive">
+                <input asp-for="Name" class="form-control" aria-requierd="true"/>
+                <label asp-for="Name"></label>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+

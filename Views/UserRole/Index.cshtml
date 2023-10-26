@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityRole>
+<h1>Role</h1>
+<p><a asp-action="Create">Add Role</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Role Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+                <td>@s.Id</td>
+                <td>@s.Name</td>
+        }
+    </tbody>
+</table>
+

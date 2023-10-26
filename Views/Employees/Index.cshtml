@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<Employee>
+<h1>Employee List</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Employee Name</th>
+            <th>Address</th>
+            <th>Gender</th>
+            <th>Phone Number</th>
+            <th>Edit/Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.EmployeeID</td>
+                <td>@s.EmployeeName</td>
+                <td>@s.Address</td>
+                <td>
+                    @{
+                        if (s.Gender)
+                        {
+                            @("Nam")
+                        }
+                        else
+                        {
+                            @("Nữ")
+                        }
+                    }
+                </td>
+                <td>@s.PhoneNumber</td>
+                <td><a asp-action="Edit" asp-route-id="@s.EmployeeID">Edit</a>|<a asp-action="Delete" asp-route-id="@s.EmployeeID">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Create" class="btn btn-primary">Create New Employee</a>

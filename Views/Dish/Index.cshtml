@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<Dish>
+<div class"ms-2 mx-2">
+    <h1>Dish List</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Dish Id</th>
+                <th>Dish Name</th>
+                <th>Price</th>
+                <th>Making</th>
+                <th>Request</th>
+                <th>Edit/Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.DishID</td>
+                    <td>@s.DishName</td>
+                    <td>@s.Price</td>
+                    <td>@s.Making</td>
+                    <td>@s.Request</td>
+                    <td><a asp-action="Edit" asp-route-id="@s.DishID">Edit</a>|<a asp-action="Delete" asp-route-id="@s.DishID">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-action="Create" class="btn btn-primary">Create New Dish</a>
+</div>
