@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace BtlNhom6.Data;
 
@@ -15,8 +16,12 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Dish> dishes { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<MenuDetail> MenuDetails { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<MenuDetail>()
+          .HasKey(m => new { m.MenuID, m.DishID });
         base.OnModelCreating(builder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.

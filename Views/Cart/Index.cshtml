@@ -1,0 +1,136 @@
+﻿@{
+    decimal sum = 0;
+}
+@model CartViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+</head>
+<body>
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Shopping Cart</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        @for (int i = 0; i < Model.CartItem.Count; i++)
+                        {
+                            var a = Model.CartItem[i];
+                            var b = Model.Quantity[i];
+                            <tr>
+                                <td class="align-middle"><img src="~/uploads/@a.NameImage" alt="" style="width: 50px;"> @a.DishName</td>
+                                <td class="align-middle">@a.Price</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus" data-id="@a.DishID">
+                                                <i class="fa fa-minus">-</i>
+                                            </button>
+                                        </div>
+                                        <input type="text" id="quantity" class="form-control form-control-sm bg-secondary text-center" value="@b" data-id="@a.DishID">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus" data-id="@a.DishID">
+                                                <i class="fa fa-plus">+</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times">Delete</i></button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold" id="total">
+                            @for (int i = 0; i < Model.CartItem.Count; i++)
+                            {
+                                sum += (decimal)Model.CartItem[i].Price * Model.Quantity[i];
+                            }
+                            @sum VND
+                        </h5>
+                    </div>
+                    <form asp-controller="Cart" asp-action="Checkout" method="get">
+                        <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+</body>
+</html>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Decrement quantity
+            $(".btn-minus").click(function () {
+                var productId = $(this).data("id");
+                updateQuantity(productId, -1);
+            });
+
+            // Increment quantity
+            $(".btn-plus").click(function () {
+                var productId = $(this).data("id");
+                updateQuantity(productId, 1);
+            });
+        });
+
+        function updateQuantity(productId, change) {
+            var quantityInput = $('input[data-id="' + productId + '"]');
+            $.ajax({
+                type: 'POST',
+                url: '/Cart/UpdateQuantity',
+                data: {
+                    id: productId,
+                    change: change
+                },
+                success: function (data) {
+                    // Get the current quantity value
+                    if(change == 1){
+                        var currentQuantity = parseInt(quantityInput.val()) -1;
+                    }
+                    if(change == -1){
+                        var currentQuantity = parseInt(quantityInput.val()) + 1;
+                    }
+                    // Update the value of the input element
+                    var newQuantity = currentQuantity + change;
+                    if (newQuantity < 1) {
+                        newQuantity = 1;
+                    }
+                    quantityInput.val(newQuantity);
+                    // update total
+                    $("#total").text(data.toFixed(0) + " VND");
+                }
+            });
+        }
+    </script>
+}

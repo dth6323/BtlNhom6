@@ -4,6 +4,7 @@ using BtlNhom6.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BtlNhom6.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231026151539_FullDb")]
+    partial class FullDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,9 +113,6 @@ namespace BtlNhom6.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DishID"));
 
-                    b.Property<float?>("Discount")
-                        .HasColumnType("real");
-
                     b.Property<string>("DishName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -121,6 +121,7 @@ namespace BtlNhom6.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameImage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
@@ -170,18 +171,18 @@ namespace BtlNhom6.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuId"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<float?>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("MenuName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float?>("Vat")
                         .HasColumnType("real");
@@ -191,9 +192,7 @@ namespace BtlNhom6.Migrations
 
                     b.HasKey("MenuId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Menus");
                 });
@@ -206,6 +205,9 @@ namespace BtlNhom6.Migrations
                     b.Property<int>("DishID")
                         .HasColumnType("int");
 
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -215,6 +217,8 @@ namespace BtlNhom6.Migrations
                     b.HasKey("MenuID", "DishID");
 
                     b.HasIndex("DishID");
+
+                    b.HasIndex("EmployeeID");
 
                     b.ToTable("MenuDetails");
                 });
@@ -358,21 +362,9 @@ namespace BtlNhom6.Migrations
 
             modelBuilder.Entity("BtlNhom6.Models.Menu", b =>
                 {
-                    b.HasOne("BtlNhom6.Models.Employee", "Employee")
-                        .WithMany("Menu")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BtlNhom6.Areas.Identity.Data.ApplicationUser", "User")
+                    b.HasOne("BtlNhom6.Areas.Identity.Data.ApplicationUser", null)
                         .WithMany("Menus")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("User");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("BtlNhom6.Models.MenuDetail", b =>
@@ -383,6 +375,12 @@ namespace BtlNhom6.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BtlNhom6.Models.Employee", "Employee")
+                        .WithMany("MenuDetail")
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BtlNhom6.Models.Menu", "Menu")
                         .WithMany()
                         .HasForeignKey("MenuID")
@@ -390,6 +388,8 @@ namespace BtlNhom6.Migrations
                         .IsRequired();
 
                     b.Navigation("Dish");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Menu");
                 });
@@ -457,7 +457,7 @@ namespace BtlNhom6.Migrations
 
             modelBuilder.Entity("BtlNhom6.Models.Employee", b =>
                 {
-                    b.Navigation("Menu");
+                    b.Navigation("MenuDetail");
                 });
 #pragma warning restore 612, 618
         }

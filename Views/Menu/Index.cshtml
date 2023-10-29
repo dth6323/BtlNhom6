@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<Menu>
+<h1>Employee List</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User Id</th>
+            <th>Date Time</th>
+            <th>Employee ID</th>
+            <th>Vat</th>
+            <th>Discount</th>
+            <th>Total Price</th>
+            <th>Details/Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.MenuId</td>
+                <td>@s.UserId</td>
+                <td>@s.DateTime</td>
+                <td>@s.EmployeeId</td>
+                <td>@s.Vat</td>
+                <td>@s.Discount</td>
+                <td>@s.totalprice</td>
+
+                <td><a asp-action="Details" asp-route-id="@s.MenuId">Detail</a>|<a asp-action="Delete" asp-route-id="@s.MenuId">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

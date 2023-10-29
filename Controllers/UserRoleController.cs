@@ -1,9 +1,12 @@
 ﻿using BtlNhom6.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BtlNhom6.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class UserRoleController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;

@@ -1,11 +1,14 @@
 ﻿using BtlNhom6.Data;
 using BtlNhom6.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BtlNhom6.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class Employeescontroller : Controller
     {
         private AuthDbContext db;

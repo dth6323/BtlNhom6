@@ -4,7 +4,7 @@
     {
         public Employee()
         {
-            MenuDetail = new HashSet<MenuDetail>();
+            Menu = new HashSet<Menu>();
         }
 
         public int EmployeeID { get; set; }
@@ -12,6 +12,6 @@
         public string Address { get; set; }
         public bool Gender { get; set; }
         public string PhoneNumber { get; set; }
-        public virtual ICollection<MenuDetail> MenuDetail { get; set; }
+        public virtual ICollection<Menu> Menu { get; set; }
     }
 }

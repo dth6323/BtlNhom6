@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using BtlNhom6.Areas.Identity.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BtlNhom6.Areas.Identity.Pages.Account
 {
@@ -137,6 +138,11 @@ namespace BtlNhom6.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
+            var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+            Console.WriteLine(user);
+
+            // Store the user's ID in the session
+            HttpContext.Session.SetString("UserId", user.Id);
 
             // If we got this far, something failed, redisplay form
             return Page();

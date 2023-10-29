@@ -16,6 +16,8 @@
                 <th>Price</th>
                 <th>Making</th>
                 <th>Request</th>
+                <th>Discount</th>
+                <th>Image</th>
                 <th>Edit/Delete</th>
             </tr>
         </thead>
@@ -28,6 +30,8 @@
                     <td>@s.Price</td>
                     <td>@s.Making</td>
                     <td>@s.Request</td>
+                    <td>@s.Discount</td>
+                    <td><img src="~/uploads/@s.NameImage" class="img-rounded img-thumbnail" width="200 px" height="100 px" alt="Image" /></td>
                     <td><a asp-action="Edit" asp-route-id="@s.DishID">Edit</a>|<a asp-action="Delete" asp-route-id="@s.DishID">Delete</a></td>
                 </tr>
             }

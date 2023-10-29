@@ -1,0 +1,66 @@
+﻿@{
+	ViewData["Title"] = "Details";
+}
+@model Dish
+@{var item = Model;}
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Paper Kit 2 PRO by Creative Tim</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+
+	<link href="~/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/css/paper-kit.css?v=2.1.0" rel="stylesheet" />
+	<link href="~/css/demo.css" rel="stylesheet" />
+	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+	<link href="~/css/nucleo-icons.css" rel="stylesheet">
+</head>
+<body class="buy-product">
+	<div class="main">
+		<div>
+			<div class="section">
+				<div class="container">
+					<div class="row title-row">
+						<div class="col-md-2">
+							<h4 class="shop">Shop</h4>
+						</div>
+						<div class="col-md-4 ml-auto">
+							<div class="pull-right">
+								<span class="text-muted">Order Status</span> <button class="btn btn-link"> <i class="fa fa-shopping-cart"></i> 0 Items</button>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-7 col-sm-6">
+							<div class="card">
+								<img class="img-fluid" src="~/uploads/@Model.NameImage" height="300px">
+							</div> <!-- end carousel -->
+						</div>
+						<div class="col-md-5 col-sm-6">
+							<h2>@item.DishName</h2>
+							<h4 class="price"><strong>@item.Price</strong></h4>
+							<hr>
+							<p>@item.Making</p>
+							<hr>
+							<div class="row">
+								<div class="col-md-7 offset-md-5 col-sm-8">
+									<form asp-action="AddToCart" asp-controller="Cart">
+										<input type="hidden" name="id" value="@Model.DishID" />
+										<button class="btn btn-danger btn-block btn-round">Add to Cart &nbsp;</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

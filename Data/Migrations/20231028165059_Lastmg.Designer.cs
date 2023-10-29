@@ -4,6 +4,7 @@ using BtlNhom6.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BtlNhom6.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231028165059_Lastmg")]
+    partial class Lastmg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +179,10 @@ namespace BtlNhom6.Migrations
                     b.Property<float?>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmployeesId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -191,7 +197,7 @@ namespace BtlNhom6.Migrations
 
                     b.HasKey("MenuId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("UserId");
 
@@ -360,7 +366,7 @@ namespace BtlNhom6.Migrations
                 {
                     b.HasOne("BtlNhom6.Models.Employee", "Employee")
                         .WithMany("Menu")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

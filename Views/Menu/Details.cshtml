@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<MenuDetail> 
+<h1>Employee List</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Menu ID</th>
+            <th>Dish Id</th>
+            <th>Quantity</th>
+            <th>TotalPrice</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.MenuID</td>
+                <td>@s.DishID</td>
+                <td>@s.Quantity</td>
+                <td>@s.TotalPrice</td>
+            </tr>
+        }
+    </tbody>
+</table>
