@@ -5,7 +5,9 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model IEnumerable<Employee>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model X.PagedList.IPagedList<Employee>
 <h1>Employee List</h1>
 <table class="table table-striped">
     <thead>
@@ -43,4 +45,12 @@
         }
     </tbody>
 </table>
+<div class="product__pagination">
+    @Html.PagedListPager(Model,page=>Url.Action("Index",new{page=page}),new PagedListRenderOptions()
+    {
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+    })
+</div>
+
 <a asp-action="Create" class="btn btn-primary">Create New Employee</a>

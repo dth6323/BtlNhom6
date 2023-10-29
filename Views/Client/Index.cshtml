@@ -1,91 +1,78 @@
 ﻿@{
 	ViewData["Title"] = "Index";
 }
-@model IEnumerable<Dish>
-<head>
-	<link href="~/css/paper-kit.css?v=2.1.0" rel="stylesheet" />
-	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
-	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-</head>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model X.PagedList.IPagedList<Dish>
 <div class="wrapper">
-	<div class="section latest-offers">
-		<div class="container">
-			<h3 class="section-title">Latest Offers</h3>
-			<div class="row">				
-				@foreach (var item in Model)
-				{
-					<div class="col-md-4">
-						<div class="card card-product card-plain">
-							<div class="card-image">
-									<a asp-route-id="@item.DishID" asp-action="Details" asp-controller="Client">
-										<img src="~/uploads/@item.NameImage" alt="Rounded Image" class="img-rounded img-responsive" width="406.39 px" height="550px">
-									</a>
-								<div class="card-body">
-									<div class="card-description">
-										<h5 class="card-title">@item.DishName</h5>
-										<p class="card-description">This is a limited edition dress for the fall collection. Comes in 3 colours.</p>
-									</div>
-									<div class="price">
-										@{
-											float discount = item.Discount ?? 0;
-											float discountedPrice = item.Price * (1 - discount);
-										}
-										<strike>@item.Price VND</strike> <span class="text-danger">@discountedPrice VND</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				}
-			</div>
-		</div>
-	</div><!-- section -->
 	<div class="section section-gray">
 		<div class="container">
 
 			<h3 class="section-title">Menu</h3>
 			<div class="row">
-				<div >
+				<div>
 					<div class="products">
 
 						<div class="row">
 
-						@foreach (var item in Model)
-						{
-							<div class="col-md-4 col-sm-4">
-								<div class="card card-product card-plain">
-									<div class="card-image">
-											<a asp-route-id="@item.DishID" asp-action="Detail" asp-controller="Client">
-											<img src="~/uploads/@item.NameImage" alt="Rounded Image" class="img-rounded img-responsive" width="406.39 px" height="550px">
-										</a>
-										<div class="card-body">
-											<div class="card-description">
-												<h5 class="card-title">@item.DishName</h5>
+							@foreach (var item in Model)
+							{
+								<div class="col-md-4 col-sm-4">
+									<div class="card card-product card-plain">
+										<div class="card-image">
+											<a asp-route-id="@item.DishID" asp-action="Details" asp-controller="Client">
+												<img src="~/uploads/@item.NameImage" alt="Rounded Image" class="img-rounded img-responsive" width="406.39 px" height="550px">
+											</a>
+											<div class="card-body">
+												<div class="card-description">
+													<h5 class="card-title">@item.DishName</h5>
+												</div>
+												<div class="price">
+													@{
+														float auprice;
+														if (item.Discount != null)
+														{
+															float discount = item.Discount ?? 0;
+															auprice = item.Price * (1 - discount);
+														}
+														else
+															auprice = item.Price;
+													}
+													@if (item.Discount != null)
+													{
+														<strike>@item.Price VND</strike> <span class="text-danger">@auprice VND</span>
+													}
+													else
+													{
+														<div class="price">
+															<h5>@item.Price VND</h5>
+														</div>
+													}
+												</div>
 											</div>
-											<div class="price">
-												<h5>@item.Price VND</h5>
-											</div>
-										</div>
-										<div class="card-footer">
+											<div class="card-footer">
 												<form asp-action="AddToCart" asp-controller="Cart" method="post">
 													<input type="hidden" name="id" value="@item.DishID" />
 													<button type="submit" class="btn btn-sm text-dark p-0">
 														<i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
 													</button>
 												</form>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						}
-						</div>
-
-							<div class="col-md-3 offset-md-4">
-								<button rel="tooltip" title="This is a morphing button" class="btn btn-round btn-outline-default" id="successBtn" data-toggle="morphing" data-rotation-color="gray">Load more...</button>
-							</div>
+							}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div><!-- section -->
+	</div>
+</div>
+<div class="product__pagination">
+			@Html.PagedListPager(Model,page=>Url.Action("Index",new{page=page}),new PagedListRenderOptions()
+			{
+			LiElementClasses = new string[] { "page-item" },
+			PageClasses = new string[] { "page-link" }
+			})
+</div>

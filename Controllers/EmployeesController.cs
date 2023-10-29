@@ -1,9 +1,11 @@
-﻿using BtlNhom6.Data;
+﻿using Azure;
+using BtlNhom6.Data;
 using BtlNhom6.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace BtlNhom6.Controllers
 {
@@ -18,11 +20,13 @@ namespace BtlNhom6.Controllers
             this.db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            
-                var employees = db.Employees.ToList();
-                return View(employees);
+            int pagesize = 6;
+            int pagenumber = page == null || page < 0 ? 1 : page.Value;
+            var product = db.Employees.AsNoTracking().OrderBy(x => x.EmployeeName);
+            PagedList<Employee> lst = new PagedList<Employee>(product, pagenumber, pagesize);
+            return View(lst);
             
         }
         public IActionResult Create()

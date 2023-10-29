@@ -1,7 +1,9 @@
-﻿using BtlNhom6.Data;
+﻿using Azure;
+using BtlNhom6.Data;
 using BtlNhom6.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace BtlNhom6.Controllers
 {
@@ -14,10 +16,13 @@ namespace BtlNhom6.Controllers
             this.db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var menu = db.Menus.ToList();
-            return View(menu);
+            int pagesize = 6;
+            int pagenumber = page == null || page < 0 ? 1 : page.Value;
+            var product = db.Menus.AsNoTracking().OrderBy(x => x.totalprice);
+            PagedList<Menu> lst = new PagedList<Menu>(product, pagenumber, pagesize);
+            return View(lst);
         }            
         public IActionResult Delete(int id)
         {

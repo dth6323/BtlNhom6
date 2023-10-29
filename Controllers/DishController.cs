@@ -1,4 +1,5 @@
-﻿using BtlNhom6.Data;
+﻿using Azure;
+using BtlNhom6.Data;
 using BtlNhom6.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartBreadcrumbs.Attributes;
 using System;
+using X.PagedList;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace BtlNhom6.Controllers
@@ -21,10 +23,13 @@ namespace BtlNhom6.Controllers
             _environment = environment;
             this.db = db;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var dish = db.dishes.ToList();
-            return View(dish);
+			int pagesize = 6;
+			int pagenumber = page == null || page < 0 ? 1 : page.Value;
+			var product = db.dishes.AsNoTracking().OrderBy(x => x.DishName);
+			PagedList<Dish> lst = new PagedList<Dish>(product, pagenumber, pagesize);
+			return View(lst);
         }
         public IActionResult Create()
         {
