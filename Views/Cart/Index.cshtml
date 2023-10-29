@@ -42,7 +42,7 @@
                         {
                             var a = Model.CartItem[i];
                             var b = Model.Quantity[i];
-                            <tr>
+                            <tr data-id="@a.DishID">
                                 <td class="align-middle"><img src="~/uploads/@a.NameImage" alt="" style="width: 50px;"> @a.DishName</td>
                                 <td class="align-middle">@a.Price</td>
                                 <td class="align-middle">
@@ -60,7 +60,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times">Delete</i></button></td>
+                                <td class="align-middle">
+                                    <button class="btn btn-sm btn-primary btn-delete" data-id="@a.DishID">
+                                        <i class="fa fa-times">Delete</i>
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -91,7 +95,6 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            // Decrement quantity
             $(".btn-minus").click(function () {
                 var productId = $(this).data("id");
                 updateQuantity(productId, -1);
@@ -102,35 +105,50 @@
                 var productId = $(this).data("id");
                 updateQuantity(productId, 1);
             });
-        });
-
-        function updateQuantity(productId, change) {
-            var quantityInput = $('input[data-id="' + productId + '"]');
-            $.ajax({
-                type: 'POST',
-                url: '/Cart/UpdateQuantity',
-                data: {
-                    id: productId,
-                    change: change
-                },
-                success: function (data) {
-                    // Get the current quantity value
-                    if(change == 1){
-                        var currentQuantity = parseInt(quantityInput.val()) -1;
-                    }
-                    if(change == -1){
-                        var currentQuantity = parseInt(quantityInput.val()) + 1;
-                    }
-                    // Update the value of the input element
-                    var newQuantity = currentQuantity + change;
-                    if (newQuantity < 1) {
-                        newQuantity = 1;
-                    }
-                    quantityInput.val(newQuantity);
-                    // update total
-                    $("#total").text(data.toFixed(0) + " VND");
-                }
+            $(".btn-delete").click(function () {
+                var productId = $(this).data("id");
+                deleteItem(productId);
             });
-        }
+            function updateQuantity(productId, change) {
+                var quantityInput = $('input[data-id="' + productId + '"]');
+                var currentQuantity = parseInt(quantityInput.val());
+
+                // Ensure that the quantity doesn't go below 1
+                if (currentQuantity + change < 1) {
+                    change = 1 - currentQuantity; // Set change to make quantity 1
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Cart/UpdateQuantity',
+                    data: {
+                        id: productId,
+                        change: change
+                    },
+                    success: function (data) {
+                        // Update the value of the input element
+                        quantityInput.val(currentQuantity + change);
+
+                        // Update the total
+                        $("#total").text(data.toFixed(0) + " VND");
+                    }
+                });
+            }
+            function deleteItem(productId) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Cart/DeleteQuantity',
+                    data: { id: productId },
+                    success: function (data) {
+                        // Handle success, remove the corresponding row
+                        var rowToDelete = $('tr[data-id="' + productId + '"]');
+                        rowToDelete.remove();
+
+                        // Update the total
+                        $("#total").text(data.toFixed(0) + " VND");
+                    }
+                });
+            }
+        });
     </script>
 }

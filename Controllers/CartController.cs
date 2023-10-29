@@ -189,6 +189,39 @@ namespace BtlNhom6.Controllers
 			// Return a success response
 			return Ok(sum);
 		}
+        public IActionResult DeleteQuantity(int id)
+        {
+            // Retrieve cart items and quantities from the session
+            var cartItems = HttpContext.Session.Get<List<Dish>>("Cart");
+            var quantities = HttpContext.Session.Get<List<int>>("Quantity");
 
-	}
+            // Find the product in the cart
+            var product = cartItems.FirstOrDefault(p => p.DishID == id);
+
+            if (product != null)
+            {
+                // Find the index of the product in the cart
+                var index = cartItems.IndexOf(product);
+
+                // Remove the product and its corresponding quantity from the lists
+                cartItems.RemoveAt(index);
+                quantities.RemoveAt(index);
+
+                // Save the updated cart items and quantities to the session
+                HttpContext.Session.Set("Cart", cartItems);
+                HttpContext.Session.Set("Quantity", quantities);
+            }
+
+            // Update the total
+            decimal sum = 0;
+            for (int i = 0; i < cartItems.Count; i++)
+            {
+                sum += (decimal)cartItems[i].Price * quantities[i];
+            }
+
+            // Return the updated total as a JSON response
+            return Json(sum);
+        }
+
+    }
 }

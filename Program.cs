@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(con
 
 builder.Services.AddScoped<CartViewModel>();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>();
