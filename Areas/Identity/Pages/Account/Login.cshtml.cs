@@ -109,7 +109,7 @@ namespace BtlNhom6.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Client");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -138,11 +138,6 @@ namespace BtlNhom6.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-            var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
-            Console.WriteLine(user);
-
-            // Store the user's ID in the session
-            HttpContext.Session.SetString("UserId", user.Id);
 
             // If we got this far, something failed, redisplay form
             return Page();

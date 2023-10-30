@@ -4,6 +4,7 @@ using BtlNhom6.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
@@ -20,15 +21,33 @@ namespace BtlNhom6.Controllers
             this.db = db;
         }
 
-        public IActionResult Index(int? page)
+        public IActionResult Index(string sortOrder, int? page, string searchString)
         {
-            int pagesize = 6;
-            int pagenumber = page == null || page < 0 ? 1 : page.Value;
-            var product = db.Employees.AsNoTracking().OrderBy(x => x.EmployeeName);
-            PagedList<Employee> lst = new PagedList<Employee>(product, pagenumber, pagesize);
-            return View(lst);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
             
+            int pageSize = 6;
+            int pageNumber = page ?? 1; // Simplified null-coalescing operator usage
+
+            IQueryable<Employee> product; // Declare the product variable as IQueryable<Employee>
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    product = db.Employees.AsNoTracking().OrderByDescending(x => x.EmployeeName);
+                    break;
+                default:
+                    product = db.Employees.AsNoTracking().OrderBy(x => x.EmployeeName);
+                    break;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                product = product.Where(s => s.EmployeeName.Contains(searchString));
+            }
+            PagedList<Employee> lst = new PagedList<Employee>(product, pageNumber, pageSize);
+            return View(lst);
         }
+
         public IActionResult Create()
         {
             return View();

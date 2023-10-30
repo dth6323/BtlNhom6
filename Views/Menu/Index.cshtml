@@ -6,16 +6,32 @@
 @using X.PagedList.Web.Common;
 @model X.PagedList.IPagedList<Menu>
 <h1>Employee List</h1>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Address: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>User Id</th>
-            <th>Date Time</th>
+            <th>User Name</th>
+            <th>User Address</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(ViewData["DateSortParm"])">Date time</a>
+            </th>
             <th>Employee ID</th>
             <th>Vat</th>
             <th>Discount</th>
-            <th>Total Price</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">Price</a>
+            </th>
             <th>Details/Delete</th>
         </tr>
     </thead>
@@ -25,6 +41,8 @@
             <tr>
                 <td>@s.MenuId</td>
                 <td>@s.UserId</td>
+                <td>@s.User.FirstName @s.User.LastName</td>
+                <td>@s.User.Address</td>
                 <td>@s.DateTime</td>
                 <td>@s.EmployeeId</td>
                 <td>@s.Vat</td>

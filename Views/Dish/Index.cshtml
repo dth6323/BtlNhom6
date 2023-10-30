@@ -10,12 +10,27 @@
 @model X.PagedList.IPagedList<Dish>
 <div class"ms-2 mx-2">
     <h1>Dish List</h1>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default" /> |
+                <a asp-action="Index">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+
+    <a asp-action="Create" class="btn btn-primary">Create New Dish</a>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Dish Id</th>
-                <th>Dish Name</th>
-                <th>Price</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@(ViewData["NameSortParm"])">Name</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">Price</a>
+                </th>   
                 <th>Making</th>
                 <th>Request</th>
                 <th>Discount</th>
@@ -48,4 +63,3 @@
     })
 </div>
 
-<a asp-action="Create" class="btn btn-primary">Create New Dish</a>

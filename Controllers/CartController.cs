@@ -143,7 +143,7 @@ namespace BtlNhom6.Controllers
 			// Xóa giỏ hàng sau khi đặt hàng
 			HttpContext.Session.Remove("Cart");
 			HttpContext.Session.Remove("Quantity");
-			return RedirectToAction("Index", "Cart");
+			return RedirectToAction("Index", "Client");
 		}
 		// Hàm tính tổng tiền đơn hàng
 		private float CalculateTotal(List<Dish> products, List<int> quantities)

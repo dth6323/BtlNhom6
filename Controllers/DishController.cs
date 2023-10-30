@@ -23,12 +23,34 @@ namespace BtlNhom6.Controllers
             _environment = environment;
             this.db = db;
         }
-        public IActionResult Index(int? page)
+        public IActionResult Index(string sortOrder, int? page, string searchString)
         {
-			int pagesize = 6;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["CurrentFilter"] = searchString;
+            int pagesize = 6;
 			int pagenumber = page == null || page < 0 ? 1 : page.Value;
-			var product = db.dishes.AsNoTracking().OrderBy(x => x.DishName);
-			PagedList<Dish> lst = new PagedList<Dish>(product, pagenumber, pagesize);
+            IQueryable<Dish> product;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    product = db.dishes.AsNoTracking().OrderByDescending(x => x.DishName);
+                    break;
+                case "Price":
+                    product = db.dishes.AsNoTracking().OrderBy(x => x.Price);
+                    break;
+                case "date_desc":
+                    product = db.dishes.AsNoTracking().OrderByDescending(x => x.Price);
+                    break;
+                default:
+                    product = db.dishes.AsNoTracking().OrderBy(x => x.DishName);
+                    break;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                product = product.Where(s => s.DishName.Contains(searchString));
+            }
+            PagedList<Dish> lst = new PagedList<Dish>(product, pagenumber, pagesize);
 			return View(lst);
         }
         public IActionResult Create()
