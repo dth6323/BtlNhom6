@@ -1,12 +1,14 @@
 ﻿using Azure;
 using BtlNhom6.Data;
 using BtlNhom6.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
 namespace BtlNhom6.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MenuController : Controller
     {
         private AuthDbContext db;
